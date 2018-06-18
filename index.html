@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+        <link href="grid.css" type="text/css" rel="stylesheet">
+        <link href="main.css" type="text/css" rel="stylesheet">
+
+        <title>点餐系统</title>
+
+        <!-- Vue js: development version, includes helpful console warnings -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-latest.js"></script>
+        
+    </head>
+    <body>
+        <div id="main" class="grid">
+            <div class="title">
+                <div id="res_name" style="float: left;">{{ title }}</div>
+                <div id="languageSelect" class="select" style="float: right;">
+                    <!--
+                    <select v-on:change="languageSelection" v-model="languageSelected">
+                        <option disabled value="">Pleases select your language</option>
+                        <option value="CN">中文</option>
+                        <option value="DE">Deutsch</option>
+                        <option value="EN">English</option>
+                    </select>
+                    -->
+                    <!-- the codes bellow use the v-for to create the select options so we
+                    can keep the data in the data of Vue instance. It is better when in the
+                    furture we want to add another new language. All we need to do is to add 
+                    a new object in the data of Vue instance -->
+                    <select v-on:change="languageSelection" v-model="languageSelected">
+                        <!-- default disabled 1st option for iOS system to avoid error, see:
+                        https://vuejs.org/v2/guide/forms.html -->
+                        <option disabled value="">Pleases select your language</option> 
+                        <option v-for="language in languageOptions" v-bind:value="language.value">
+                            {{ language.text }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="header">
+                <login-time></login-time>
+            </div>
+            <div class="sidebar">
+                <div id="login_div" class="main-div" v-bind:style="login_div_style">
+                    <h3>{{ login_title }}</h3>
+                    <input type="email" placeholder="Email..." id="email_field" v-model="loginEmail" />
+                    <input type="password" placeholder="Password..." id="password_field" v-model="loginPW" />
+                    <p v-bind:style="login_wrong_message_style">The Email or Password is wrong, please try again</p>
+                    <button @click="login">{{ login_btn }}</button>
+                  </div>
+                
+                <div id="user_div" class="loggedin-div" v-bind:style="user_div_style">
+                    <h3>{{ loggedin_info }}</h3>
+                    <p id="user_para">{{ loggedin_welcome }}: {{ current_user_email }}</p>
+                    <button @click="submitOrder">{{ submit_order }}</button>
+                    <button @click="logout">{{ logout_btn }}</button>
+                  </div>
+            </div>
+            <div class="content">
+                    <div v-for="(content, idx) in contentObject" class="sub_content_area">
+                        <div class="pics">pic{{ idx+1 }}</div>
+                        <div class="buttons"><content-button v-bind:content="contentObject[idx]"></content-button></div>
+                    </div>
+<!-- 
+                <div class="sub_content_area">
+                    <div class="pics">pic1</div>
+                    <div class="buttons"><content-button v-bind:content="contentObject"></content-button></div>
+                </div>
+                <div class="sub_content_area">
+                    <div class="pics">pic2</div>
+                    <div class="buttons"><content-button v-bind:content="contentObject"></content-button></div>
+                </div>
+                <div class="sub_content_area">
+                    <div class="pics">pic3</div>
+                    <div class="buttons"><content-button v-bind:content="contentObject"></content-button></div>
+                </div>
+                <div class="sub_content_area">
+                    <div class="pics">pic4</div>
+                    <div class="buttons"><content-button v-bind:content="contentObject"></content-button></div>
+                </div>
+                <div class="sub_content_area">
+                    <div class="pics">pic5</div>
+                    <div class="buttons"><content-button v-bind:content="contentObject"></content-button></div>
+                </div>
+                <div class="sub_content_area">
+                    <div class="pics">pic6</div>
+                    <div class="buttons"><content-button v-bind:content="contentObject"></content-button></div>
+                </div>
+                <div class="sub_content_area">
+                    <div class="pics">pic7</div>
+                    <div class="buttons"><content-button v-bind:content="contentObject"></content-button></div>
+                </div>
+                <div class="sub_content_area">
+                    <div class="pics">pic8</div>
+                    <div class="buttons"><content-button v-bind:content="contentObject"></content-button></div>
+                </div>
+-->
+            </div>
+            <div class="footer">
+                <p>{{ footer_info }}</p>
+                <p>{{ version }}</p>
+            </div>
+
+        </div>
+
+        <!-- firebase -->
+        <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+        <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBILFs5PmzdFGPg4hAX7Y3dLDAvtzqQGVo",
+            authDomain: "vueorder.firebaseapp.com",
+            databaseURL: "https://vueorder.firebaseio.com",
+            projectId: "vueorder",
+            storageBucket: "",
+            messagingSenderId: "608629749475"
+        };
+        firebase.initializeApp(config);
+        </script>
+
+        <script src="main.js"></script>
+    </body>
+</html>
